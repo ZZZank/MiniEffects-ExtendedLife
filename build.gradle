@@ -155,7 +155,7 @@ dependencies {
         testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     }
 
-    compileOnly(rfg.deobf("mezz.jei:jei_1.12.2:4.13.1.220"))
+    compileOnly(rfg.deobf("mezz.jei:jei_1.12.2:4.16.1.1012"))
 }
 
 apply from: 'gradle/scripts/dependencies.gradle'
