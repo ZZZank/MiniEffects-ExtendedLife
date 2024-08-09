@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * @author ZZZank
  */
-public class MiniEffectLateMixinLoader implements ILateMixinLoader {
+public class MiniEffectsLateMixin implements ILateMixinLoader {
     @Override
     public List<String> getMixinConfigs() {
         return Collections.singletonList(MiniEffectsInfo.MIXIN_CONFIG_MOD);
