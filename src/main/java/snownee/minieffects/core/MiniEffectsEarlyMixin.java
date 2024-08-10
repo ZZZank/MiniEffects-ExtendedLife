@@ -10,7 +10,7 @@ import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 import snownee.minieffects.MiniEffectsInfo;
 import zone.rong.mixinbooter.IEarlyMixinLoader;
 
-public class CoreMod implements IEarlyMixinLoader, IFMLLoadingPlugin {
+public class MiniEffectsEarlyMixin implements IEarlyMixinLoader, IFMLLoadingPlugin {
 
 	@Override
 	public String[] getASMTransformerClass() {
