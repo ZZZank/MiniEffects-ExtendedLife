@@ -28,27 +28,28 @@ import snownee.minieffects.MiniEffectsConfig;
 @Mixin(InventoryEffectRenderer.class)
 public abstract class MixinDisplayEffectsScreen extends GuiContainer implements IAreasGetter {
     @Unique
+    private final Rectangle area = new Rectangle();
+    @Unique
     private boolean expand;
     @Unique
     private int effects;
     @Unique
-    private Rectangle area;
-    @Unique
-    private ItemStack iconItem = new ItemStack(Items.POTIONITEM);
+    private final ItemStack iconItem = new ItemStack(Items.POTIONITEM);
 
     private MixinDisplayEffectsScreen(Container inventorySlotsIn) {
         super(inventorySlotsIn);
     }
 
     @Inject(method = "initGui", at = @At("TAIL"))
-    public void minimaleffects_init(CallbackInfo ci) {
+    public void miniEffects$init(CallbackInfo ci) {
         iconItem.setTagCompound(new NBTTagCompound());
-        updateArea();
+        miniEffects$updateArea();
     }
 
     @Inject(method = "drawActivePotionEffects", cancellable = true, at = @At("HEAD"))
-    private void minimaleffects_renderEffects(CallbackInfo ci) {
-        Minecraft mc = Minecraft.getMinecraft();
+    private void miniEffects$render(CallbackInfo ci) {
+        EntityPlayerSP player = mc.player;
+
         int effects = 0, bad = 0;
         for (PotionEffect effectInstance : mc.player.getActivePotionEffects()) {
             if (effectInstance.getPotion().shouldRender(effectInstance)) {
@@ -62,30 +63,31 @@ public abstract class MixinDisplayEffectsScreen extends GuiContainer implements 
         if (this.effects != effects) {
             this.effects = effects;
             if (effects == 0 || expand) {
-                updateArea();
+                miniEffects$updateArea();
             }
         }
+
         final ScaledResolution scaledresolution = new ScaledResolution(mc);
-        int i1 = scaledresolution.getScaledWidth();
-        int j1 = scaledresolution.getScaledHeight();
-        int x = Mouse.getX() * i1 / mc.displayWidth;
-        int y = j1 - Mouse.getY() * j1 / mc.displayHeight - 1;
+        int scaledWidth = scaledresolution.getScaledWidth();
+        int scaledHeight = scaledresolution.getScaledHeight();
+        int x = Mouse.getX() * scaledWidth / mc.displayWidth;
+        int y = scaledHeight - Mouse.getY() * scaledHeight / mc.displayHeight - 1;
         boolean expand = area.contains(x, y);
         if (expand != this.expand) {
             this.expand = expand;
-            updateArea();
+            miniEffects$updateArea();
         }
 
         if (effects <= 0 || expand) {
-			return;
+            return;
         }
         mc.getTextureManager().bindTexture(GuiContainer.INVENTORY_BACKGROUND);
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         x = area.x;
         y = area.y;
         this.drawTexturedModalRect(x, y, 141, 166, 24, 24);
-        EntityPlayerSP player = mc.player;
-        int color = player.getDataManager().get(MixinLivingEntity.getParameter());
+
+        int color = player.getDataManager().get(AccessLivingEntity.getParameter());
         iconItem.getTagCompound().setInteger("CustomPotionColor", color);
         mc.getRenderItem().renderItemAndEffectIntoGUI(iconItem, x + 3, y + 4);
         GlStateManager.pushMatrix();
@@ -106,20 +108,19 @@ public abstract class MixinDisplayEffectsScreen extends GuiContainer implements 
     }
 
     @Unique
-    private void updateArea() {
+    private void miniEffects$updateArea() {
         int left = this.getGuiLeft();
         int top = this.getGuiTop();
         if (expand) {
-            int height = effects > 5 ? 165 : 33 * effects;
-            area = new Rectangle(left - 124, top, 119, height);
+            area.setBounds(left - 124, top, 119, Math.min(33 * 5, 33 * effects));
         } else {
-            area = new Rectangle(left - 25 + MiniEffectsConfig.xOffset, top + MiniEffectsConfig.yOffset, 20, 20);
+            area.setBounds(left - 25 + MiniEffectsConfig.xOffset, top + MiniEffectsConfig.yOffset, 20, 20);
         }
     }
 
     @Override
     public List<Rectangle> getAreas() {
-        return area == null || effects == 0
+        return effects == 0
             ? Collections.emptyList()
             : Collections.singletonList(area);
     }
