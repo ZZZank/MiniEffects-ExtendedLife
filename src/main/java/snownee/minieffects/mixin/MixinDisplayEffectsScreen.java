@@ -4,7 +4,6 @@ import java.awt.Rectangle;
 import java.util.Collections;
 import java.util.List;
 
-import com.google.common.collect.ImmutableList;
 import net.minecraft.potion.Potion;
 import org.lwjgl.input.Mouse;
 
@@ -31,8 +30,6 @@ public abstract class MixinDisplayEffectsScreen extends GuiContainer implements 
     private final Rectangle miniEff$iconArea = new Rectangle();
     @Unique
     private final Rectangle miniEff$expandedArea = new Rectangle();
-    @Unique
-    private final List<Rectangle> miniEff$cachedAreas = ImmutableList.of(miniEff$iconArea, miniEff$expandedArea);
     @Unique
     private boolean miniEff$expand;
     @Unique
@@ -72,10 +69,10 @@ public abstract class MixinDisplayEffectsScreen extends GuiContainer implements 
         }
 
         final ScaledResolution scaledresolution = new ScaledResolution(mc);
-        int scaledWidth = scaledresolution.getScaledWidth();
-        int scaledHeight = scaledresolution.getScaledHeight();
-        int x = Mouse.getX() * scaledWidth / mc.displayWidth;
-        int y = scaledHeight - Mouse.getY() * scaledHeight / mc.displayHeight - 1;
+        final int scaledWidth = scaledresolution.getScaledWidth();
+        final int scaledHeight = scaledresolution.getScaledHeight();
+        final int x = Mouse.getX() * scaledWidth / mc.displayWidth;
+        final int y = scaledHeight - Mouse.getY() * scaledHeight / mc.displayHeight - 1;
 
         boolean shouldExpand = miniEff$iconArea.contains(x, y);
         if (this.miniEff$expand) { //prevent shrinking if in expanded area and currently expanded
@@ -133,6 +130,7 @@ public abstract class MixinDisplayEffectsScreen extends GuiContainer implements 
 
     @Override
     public List<Rectangle> getAreas() {
-        return miniEff$effects == 0 ? Collections.emptyList() : miniEff$cachedAreas;
+        return miniEff$effects == 0 ? Collections.emptyList()
+            : Collections.singletonList(miniEff$expand ? miniEff$expandedArea : miniEff$iconArea);
     }
 }
