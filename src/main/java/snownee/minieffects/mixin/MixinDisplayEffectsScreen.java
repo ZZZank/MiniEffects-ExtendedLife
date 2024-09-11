@@ -1,6 +1,7 @@
 package snownee.minieffects.mixin;
 
 import java.awt.Rectangle;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -41,7 +42,7 @@ public abstract class MixinDisplayEffectsScreen extends GuiContainer implements 
         super(null);
     }
 
-    @Inject(method = "initGui", at = @At("TAIL"))
+    @Inject(method = "initGui()V", at = @At("TAIL"))
     public void miniEffects$init(CallbackInfo ci) {
         miniEff$iconItem.setTagCompound(new NBTTagCompound());
         miniEffects$updateArea();
@@ -49,21 +50,25 @@ public abstract class MixinDisplayEffectsScreen extends GuiContainer implements 
 
     @Inject(method = "drawActivePotionEffects", cancellable = true, at = @At("HEAD"))
     private void miniEffects$render(CallbackInfo ci) {
+        Collection<PotionEffect> effects = mc.player.getActivePotionEffects();
+        if (effects.isEmpty()) {
+            return;
+        }
 
-        int effects = 0, bad = 0;
-        for (PotionEffect effect : mc.player.getActivePotionEffects()) {
+        int effectCount = 0, badCount = 0;
+        for (PotionEffect effect : effects) {
             Potion potion = effect.getPotion();
             if (potion.shouldRender(effect)) {
-                ++effects;
+                ++effectCount;
                 if (!potion.isBeneficial()) {
-                    ++bad;
+                    ++badCount;
                 }
             }
         }
 
-        if (this.miniEff$effects != effects) {
-            this.miniEff$effects = effects;
-            if (effects == 0 || miniEff$expand) {
+        if (this.miniEff$effects != effectCount) {
+            this.miniEff$effects = effectCount;
+            if (effectCount == 0 || miniEff$expand) {
                 miniEffects$updateArea();
             }
         }
@@ -76,17 +81,17 @@ public abstract class MixinDisplayEffectsScreen extends GuiContainer implements 
 
         boolean shouldExpand = miniEff$iconArea.contains(x, y);
         if (this.miniEff$expand) { //prevent shrinking if in expanded area and currently expanded
-            shouldExpand |= miniEff$expandedArea.contains(x, y);
+            shouldExpand = shouldExpand || miniEff$expandedArea.contains(x, y);
         }
-        if (shouldExpand != this.miniEff$expand) {
+        if (this.miniEff$expand != shouldExpand) {
             this.miniEff$expand = shouldExpand;
             miniEffects$updateArea();
         }
 
-        if (effects <= 0 || shouldExpand) {
-            return;
+        if (effectCount <= 0 || shouldExpand) {
+            return; //continue normal (expand) drawing
         }
-        miniEffects$renderUnexpanded(effects, bad);
+        miniEffects$renderUnexpanded(effectCount, badCount);
         ci.cancel();
     }
 
@@ -124,7 +129,7 @@ public abstract class MixinDisplayEffectsScreen extends GuiContainer implements 
         if (miniEff$expand) {
             miniEff$expandedArea.setBounds(left - 124, top, 119, Math.min(33 * 5, 33 * miniEff$effects));
         } else {
-            miniEff$iconArea.setBounds(left - 25 + MiniEffectsConfig.xOffset, top + MiniEffectsConfig.yOffset, 20, 20);
+            miniEff$iconArea.setBounds(left - 25 + MiniEffectsConfig.xOffset, top + MiniEffectsConfig.yOffset, 25, 25);
         }
     }
 
