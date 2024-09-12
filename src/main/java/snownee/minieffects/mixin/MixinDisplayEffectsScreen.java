@@ -1,11 +1,10 @@
 package snownee.minieffects.mixin;
 
 import java.awt.Rectangle;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import net.minecraft.potion.Potion;
+import lombok.val;
 import org.lwjgl.input.Mouse;
 
 import net.minecraft.client.gui.ScaledResolution;
@@ -15,12 +14,12 @@ import net.minecraft.client.renderer.InventoryEffectRenderer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.potion.PotionEffect;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import snownee.minieffects.IAreasGetter;
 import snownee.minieffects.MiniEffectsConfig;
 
@@ -45,39 +44,47 @@ public abstract class MixinDisplayEffectsScreen extends GuiContainer implements 
     @Inject(method = "initGui()V", at = @At("TAIL"))
     public void miniEffects$init(CallbackInfo ci) {
         miniEff$iconItem.setTagCompound(new NBTTagCompound());
-        miniEffects$updateArea();
+        miniEffects$updateArea(guiLeft, guiTop);
     }
 
-    @Inject(method = "drawActivePotionEffects", cancellable = true, at = @At("HEAD"))
-    private void miniEffects$render(CallbackInfo ci) {
-        Collection<PotionEffect> effects = mc.player.getActivePotionEffects();
+    @Inject(
+        method = "drawActivePotionEffects",
+        cancellable = true,
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/client/entity/EntityPlayerSP;getActivePotionEffects()Ljava/util/Collection;"
+        ),
+        locals = LocalCapture.CAPTURE_FAILSOFT
+    )
+    private void miniEffects$render(CallbackInfo ci, int capturedEffectLeft, int capturedEffectTop) {
+        val effects = mc.player.getActivePotionEffects();
         if (effects.isEmpty()) {
             return;
         }
 
-        int effectCount = 0, badCount = 0;
-        for (PotionEffect effect : effects) {
-            Potion potion = effect.getPotion();
+        int effectsTotal = 0, effectsBad = 0;
+        for (val effect : effects) {
+            val potion = effect.getPotion();
             if (potion.shouldRender(effect)) {
-                ++effectCount;
+                ++effectsTotal;
                 if (!potion.isBeneficial()) {
-                    ++badCount;
+                    ++effectsBad;
                 }
             }
         }
 
-        if (this.miniEff$effects != effectCount) {
-            this.miniEff$effects = effectCount;
-            if (effectCount == 0 || miniEff$expand) {
-                miniEffects$updateArea();
+        if (this.miniEff$effects != effectsTotal) {
+            this.miniEff$effects = effectsTotal;
+            if (effectsTotal == 0 || miniEff$expand) {
+                miniEffects$updateArea(capturedEffectLeft, capturedEffectTop);
             }
         }
 
-        final ScaledResolution scaledresolution = new ScaledResolution(mc);
-        final int scaledWidth = scaledresolution.getScaledWidth();
-        final int scaledHeight = scaledresolution.getScaledHeight();
-        final int x = Mouse.getX() * scaledWidth / mc.displayWidth;
-        final int y = scaledHeight - Mouse.getY() * scaledHeight / mc.displayHeight - 1;
+        val scaledresolution = new ScaledResolution(mc);
+        val scaledWidth = scaledresolution.getScaledWidth();
+        val scaledHeight = scaledresolution.getScaledHeight();
+        val x = Mouse.getX() * scaledWidth / mc.displayWidth;
+        val y = scaledHeight - Mouse.getY() * scaledHeight / mc.displayHeight - 1;
 
         boolean shouldExpand = miniEff$iconArea.contains(x, y);
         if (this.miniEff$expand) { //prevent shrinking if in expanded area and currently expanded
@@ -85,13 +92,13 @@ public abstract class MixinDisplayEffectsScreen extends GuiContainer implements 
         }
         if (this.miniEff$expand != shouldExpand) {
             this.miniEff$expand = shouldExpand;
-            miniEffects$updateArea();
+            miniEffects$updateArea(capturedEffectLeft, capturedEffectTop);
         }
 
-        if (effectCount <= 0 || shouldExpand) {
+        if (effectsTotal <= 0 || shouldExpand) {
             return; //continue normal (expand) drawing
         }
-        miniEffects$renderUnexpanded(effectCount, badCount);
+        miniEffects$renderUnexpanded(effectsTotal, effectsBad);
         ci.cancel();
     }
 
@@ -111,25 +118,35 @@ public abstract class MixinDisplayEffectsScreen extends GuiContainer implements 
         x += 22;
         y += 14;
         if (effectsTotal - effectsBad > 0) {
-            String s = Integer.toString(effectsTotal - effectsBad);
+            val s = Integer.toString(effectsTotal - effectsBad);
             mc.fontRenderer.drawStringWithShadow(s, x - mc.fontRenderer.getStringWidth(s), y, 16777215);
             y -= 10;
         }
         if (effectsBad > 0) {
-            String s = Integer.toString(effectsBad);
+            val s = Integer.toString(effectsBad);
             mc.fontRenderer.drawStringWithShadow(s, x - mc.fontRenderer.getStringWidth(s), y, 16733525);
         }
         GlStateManager.popMatrix();
     }
 
     @Unique
-    private void miniEffects$updateArea() {
-        int left = this.getGuiLeft();
-        int top = this.getGuiTop();
+    private void miniEffects$updateArea(int capturedLeft, int capturedTop) {
         if (miniEff$expand) {
-            miniEff$expandedArea.setBounds(left - 124, top, 119, Math.min(33 * 5, 33 * miniEff$effects));
+            miniEff$expandedArea.setBounds(
+                capturedLeft,
+                capturedTop,
+                119,
+                33 * Math.min(5, miniEff$effects)
+            );
         } else {
-            miniEff$iconArea.setBounds(left - 25 + MiniEffectsConfig.xOffset, top + MiniEffectsConfig.yOffset, 25, 25);
+            miniEff$iconArea.setBounds(
+                //not capturedLeft because if `capturedLeft` is tweaked, it's supposed to be
+                //targeting "expanded" situation
+                guiLeft - 25 + MiniEffectsConfig.xOffset,
+                guiTop + MiniEffectsConfig.yOffset,
+                25,
+                25
+            );
         }
     }
 
