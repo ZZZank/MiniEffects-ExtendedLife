@@ -1,4 +1,4 @@
-package snownee.minieffects.mixin;
+package snownee.minieffects.mixin.minecraft;
 
 import java.awt.Rectangle;
 import java.util.Collections;

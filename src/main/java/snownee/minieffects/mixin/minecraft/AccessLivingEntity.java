@@ -1,4 +1,4 @@
-package snownee.minieffects.mixin;
+package snownee.minieffects.mixin.minecraft;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;

@@ -1,4 +1,4 @@
-package snownee.minieffects.core;
+package snownee.minieffects.mixin;
 
 import java.util.Collections;
 import java.util.List;
@@ -39,6 +39,9 @@ public class MiniEffectsEarlyMixin implements IEarlyMixinLoader, IFMLLoadingPlug
 
 	@Override
 	public List<String> getMixinConfigs() {
-		return Collections.singletonList(MiniEffectsInfo.MIXIN_CONFIG);
+		return Collections.singletonList(String.format(
+			MiniEffectsInfo.MIXIN_CONFIG_TEMPLATE,
+			"minecraft"
+		));
 	}
 }

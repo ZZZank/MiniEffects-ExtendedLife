@@ -1,15 +1,14 @@
 {
-	"package": "snownee.minieffects.mixin",
+	"package": "snownee.minieffects.mixin.minecraft",
 	"required": true,
 	"refmap": "mixins.${mod_id}.refmap.json",
 	"target": "@env(DEFAULT)",
 	"minVersion": "0.8.5",
 	"compatibilityLevel": "JAVA_8",
-	"mixins": [
-      "AccessLivingEntity"
-	],
+	"mixins": [],
 	"server": [],
 	"client": [
+		"AccessLivingEntity",
 		"MixinDisplayEffectsScreen"
 	]
 }

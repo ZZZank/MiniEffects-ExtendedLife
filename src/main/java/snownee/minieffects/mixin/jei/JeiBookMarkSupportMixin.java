@@ -15,7 +15,12 @@ import snownee.minieffects.IAreasGetter;
 @Pseudo
 public class JeiBookMarkSupportMixin {
 
-	@Inject(method = "getGuiExtraAreas", at = @At("HEAD"), cancellable = true, require = 0)
+	@Inject(
+		method = "getGuiExtraAreas(Lnet/minecraft/client/renderer/InventoryEffectRenderer;)Ljava/util/List;",
+		at = @At("HEAD"),
+		cancellable = true,
+		require = 0
+	)
 	public void getGuiExtraAreas(InventoryEffectRenderer gui, CallbackInfoReturnable<List<Rectangle>> ci) {
 		if (gui instanceof IAreasGetter) {
 			ci.setReturnValue(((IAreasGetter) gui).getAreas());
