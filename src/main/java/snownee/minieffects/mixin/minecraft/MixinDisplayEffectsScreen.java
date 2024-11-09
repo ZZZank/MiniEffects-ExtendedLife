@@ -7,7 +7,6 @@ import java.util.List;
 import lombok.val;
 import org.lwjgl.input.Mouse;
 
-import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.InventoryEffectRenderer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -59,13 +58,7 @@ public abstract class MixinDisplayEffectsScreen extends GuiContainer implements 
             }
         }
 
-        val scaledresolution = new ScaledResolution(mc);
-        val scaledWidth = scaledresolution.getScaledWidth();
-        val scaledHeight = scaledresolution.getScaledHeight();
-        val x = Mouse.getX() * scaledWidth / mc.displayWidth;
-        val y = scaledHeight - Mouse.getY() * scaledHeight / mc.displayHeight - 1;
-
-        boolean shouldExpand = mini$effects.shouldExpand(x, y);
+        boolean shouldExpand = mini$effects.shouldExpand(mc, Mouse.getX(), Mouse.getY());
         if (this.mini$effects.expanded != shouldExpand) {
             this.mini$effects.expanded = shouldExpand;
             mini$effects.updateArea(capturedEffectLeft, capturedEffectTop);

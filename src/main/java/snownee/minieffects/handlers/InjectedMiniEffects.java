@@ -1,6 +1,8 @@
 package snownee.minieffects.handlers;
 
 import lombok.val;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -84,5 +86,14 @@ public class InjectedMiniEffects {
                 25
             );
         }
+    }
+
+    public boolean shouldExpand(Minecraft mc, int mouseX, int mouseY) {
+        val scaledResolution = new ScaledResolution(mc);
+        val scaledWidth = scaledResolution.getScaledWidth();
+        val scaledHeight = scaledResolution.getScaledHeight();
+        val x = mouseX * scaledWidth / mc.displayWidth;
+        val y = scaledHeight - mouseY * scaledHeight / mc.displayHeight - 1;
+        return shouldExpand(x, y);
     }
 }
