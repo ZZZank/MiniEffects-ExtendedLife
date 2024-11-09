@@ -1,11 +1,14 @@
 package snownee.minieffects.handlers;
 
+import lombok.val;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.PotionEffect;
 import snownee.minieffects.MiniEffectsConfig;
 
 import java.awt.*;
+import java.util.Collection;
 
 /**
  * @author ZZZank
@@ -18,10 +21,30 @@ public class InjectedMiniEffects {
     public final ItemStack icon = new ItemStack(Items.POTIONITEM);
 
     public boolean expanded;
-    public int effectsCount;
+    public int effectsTotal;
+    public int effectsBad;
 
     public InjectedMiniEffects(GuiContainer screen) {
         this.screen = screen;
+    }
+
+    /**
+     * @return {@code true} if updated, otherwise (aka {@code effects} is empty) false
+     */
+    public boolean updateEffectCounter(Collection<PotionEffect> effects) {
+        if (effects.isEmpty()) {
+            return false;
+        }
+        for (val effect : effects) {
+            val potion = effect.getPotion();
+            if (potion.shouldRender(effect)) {
+                ++effectsTotal;
+                if (!potion.isBeneficial()) {
+                    ++effectsBad;
+                }
+            }
+        }
+        return true;
     }
 
     public boolean shouldExpand(int x, int y) {
@@ -32,14 +55,14 @@ public class InjectedMiniEffects {
         return shouldExpand;
     }
 
-    public void renderMini(int effectsTotal, int effectsBad) {
+    public void renderMini() {
         MiniEffectsRenderer.renderMini(
             screen,
             expanded ? expandedArea.x : iconArea.x,
             expanded ? expandedArea.y : iconArea.y,
             icon,
-            effectsTotal,
-            effectsBad
+            this.effectsTotal,
+            this.effectsBad
         );
     }
 
@@ -49,7 +72,7 @@ public class InjectedMiniEffects {
                 capturedLeft,
                 capturedTop,
                 119,
-                33 * Math.min(5, effectsCount)
+                33 * Math.min(5, effectsTotal)
             );
         } else {
             iconArea.setBounds(

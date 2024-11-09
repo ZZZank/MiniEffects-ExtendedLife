@@ -46,25 +46,15 @@ public abstract class MixinDisplayEffectsScreen extends GuiContainer implements 
         locals = LocalCapture.CAPTURE_FAILSOFT
     )
     private void miniEffects$render(CallbackInfo ci, int capturedEffectLeft, int capturedEffectTop) {
-        val effects = mc.player.getActivePotionEffects();
-        if (effects.isEmpty()) {
+        val effectsTotalOld = mini$effects.effectsTotal;
+
+        val updated = mini$effects.updateEffectCounter(mc.player.getActivePotionEffects());
+        if (!updated) {
             return;
         }
 
-        int effectsTotal = 0, effectsBad = 0;
-        for (val effect : effects) {
-            val potion = effect.getPotion();
-            if (potion.shouldRender(effect)) {
-                ++effectsTotal;
-                if (!potion.isBeneficial()) {
-                    ++effectsBad;
-                }
-            }
-        }
-
-        if (this.mini$effects.effectsCount != effectsTotal) {
-            this.mini$effects.effectsCount = effectsTotal;
-            if (effectsTotal == 0 || mini$effects.expanded) {
+        if (mini$effects.effectsTotal != effectsTotalOld) {
+            if (mini$effects.effectsTotal == 0 || mini$effects.expanded) {
                 mini$effects.updateArea(capturedEffectLeft, capturedEffectTop);
             }
         }
@@ -81,16 +71,16 @@ public abstract class MixinDisplayEffectsScreen extends GuiContainer implements 
             mini$effects.updateArea(capturedEffectLeft, capturedEffectTop);
         }
 
-        if (effectsTotal <= 0 || shouldExpand) {
+        if (mini$effects.effectsTotal <= 0 || shouldExpand) {
             return; //continue normal (expand) drawing
         }
-        mini$effects.renderMini(effectsTotal, effectsBad);
+        mini$effects.renderMini();
         ci.cancel();
     }
 
     @Override
     public List<Rectangle> getAreas() {
-        return mini$effects.effectsCount == 0 ? Collections.emptyList()
+        return mini$effects.effectsTotal == 0 ? Collections.emptyList()
             : Collections.singletonList(mini$effects.expanded ? mini$effects.expandedArea : mini$effects.iconArea);
     }
 }
