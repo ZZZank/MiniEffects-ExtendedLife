@@ -7,7 +7,11 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 @Mod(
-	modid = MiniEffectsInfo.MOD_ID, name = MiniEffectsInfo.MOD_NAME, version = MiniEffectsInfo.VERSION, acceptedMinecraftVersions = "[1.12, 1.13)", clientSideOnly = true
+	modid = MiniEffectsInfo.MOD_ID,
+	name = MiniEffectsInfo.MOD_NAME,
+	version = MiniEffectsInfo.VERSION,
+	acceptedMinecraftVersions = "[1.12, 1.13)",
+	clientSideOnly = true
 )
 public class MiniEffects {
 	public static final String ID = MiniEffectsInfo.MOD_ID;
