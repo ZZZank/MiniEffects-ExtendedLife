@@ -9,13 +9,17 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import snownee.minieffects.IAreasGetter;
 import snownee.minieffects.handlers.InjectedMiniEffects;
+
+import java.awt.*;
+import java.util.List;
 
 /**
  * @author ZZZank
  */
 @Mixin(GuiHandyBag.class)
-public abstract class MixinGuiHandyBag extends GuiContainerLargeStacks {
+public abstract class MixinGuiHandyBag extends GuiContainerLargeStacks implements IAreasGetter {
     @Unique
     private final InjectedMiniEffects mini$eff = new InjectedMiniEffects(this);
 
@@ -51,5 +55,10 @@ public abstract class MixinGuiHandyBag extends GuiContainerLargeStacks {
         }
         mini$eff.renderMini();
         ci.cancel();
+    }
+
+    @Override
+    public List<Rectangle> miniEff$getAreas() {
+        return mini$eff.miniEff$getAreas();
     }
 }
