@@ -17,7 +17,7 @@ public class MiniEffectsRenderer {
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         screen.drawTexturedModalRect(x, y, 141, 166, 24, 24);
 
-        int color = mc.player.getDataManager().get(AccessLivingEntity.getParameter());
+        val color = mc.player.getDataManager().get(AccessLivingEntity.getParameter());
         iconItem.getTagCompound().setInteger("CustomPotionColor", color);
         mc.getRenderItem().renderItemAndEffectIntoGUI(iconItem, x + 3, y + 4);
         GlStateManager.pushMatrix();

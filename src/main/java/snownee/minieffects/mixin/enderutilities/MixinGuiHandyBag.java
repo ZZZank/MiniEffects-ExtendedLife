@@ -23,7 +23,7 @@ public abstract class MixinGuiHandyBag extends GuiContainerLargeStacks {
         super(null ,0, 0, null);
     }
 
-    @Inject(method = "drawActivePotionEffects", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "drawActivePotionEffects", at = @At("HEAD"), cancellable = true, remap = false)
     private void miniEff$drawEffects(CallbackInfo ci) {
         val effectsTotalOld = mini$eff.effectsTotal;
 
@@ -40,7 +40,7 @@ public abstract class MixinGuiHandyBag extends GuiContainerLargeStacks {
             }
         }
 
-        boolean shouldExpand = mini$eff.shouldExpand(mc, Mouse.getX(), Mouse.getY());
+        val shouldExpand = mini$eff.shouldExpand(mc, Mouse.getX(), Mouse.getY());
         if (this.mini$eff.expanded != shouldExpand) {
             this.mini$eff.expanded = shouldExpand;
             mini$eff.updateArea(capturedLeft, capturedTop);
