@@ -69,7 +69,7 @@ public abstract class MixinDisplayEffectsScreen extends GuiContainer implements 
     }
 
     @Override
-    public List<Rectangle> getAreas() {
-        return mini$effects.getAreas();
+    public List<Rectangle> miniEff$getAreas() {
+        return mini$effects.miniEff$getAreas();
     }
 }

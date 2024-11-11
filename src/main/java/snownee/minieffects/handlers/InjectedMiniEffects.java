@@ -103,7 +103,7 @@ public class InjectedMiniEffects implements IAreasGetter {
     }
 
     @Override
-    public List<Rectangle> getAreas() {
+    public List<Rectangle> miniEff$getAreas() {
         return effectsTotal == 0
             ? Collections.emptyList()
             : Collections.singletonList(expanded ? expandedArea : iconArea);

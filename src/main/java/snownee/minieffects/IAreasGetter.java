@@ -4,5 +4,5 @@ import java.awt.Rectangle;
 import java.util.List;
 
 public interface IAreasGetter {
-	List<Rectangle> getAreas();
+	List<Rectangle> miniEff$getAreas();
 }
