@@ -6,16 +6,20 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
+import snownee.minieffects.IAreasGetter;
 import snownee.minieffects.MiniEffectsConfig;
 
 import java.awt.*;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author ZZZank
  */
-public class InjectedMiniEffects {
+public class InjectedMiniEffects implements IAreasGetter {
 
     public final Rectangle iconArea = new Rectangle();
     public final Rectangle expandedArea = new Rectangle();
@@ -28,6 +32,7 @@ public class InjectedMiniEffects {
 
     public InjectedMiniEffects(GuiContainer screen) {
         this.screen = screen;
+        this.icon.setTagCompound(new NBTTagCompound());
     }
 
     /**
@@ -95,5 +100,12 @@ public class InjectedMiniEffects {
         val x = mouseX * scaledWidth / mc.displayWidth;
         val y = scaledHeight - mouseY * scaledHeight / mc.displayHeight - 1;
         return shouldExpand(x, y);
+    }
+
+    @Override
+    public List<Rectangle> getAreas() {
+        return effectsTotal == 0
+            ? Collections.emptyList()
+            : Collections.singletonList(expanded ? expandedArea : iconArea);
     }
 }
