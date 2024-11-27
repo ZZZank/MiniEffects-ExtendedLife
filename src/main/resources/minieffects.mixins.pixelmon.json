@@ -1,0 +1,14 @@
+{
+	"package": "snownee.minieffects.mixin.pixelmon",
+	"required": true,
+	"refmap": "minieffects.mixins.refmap.json",
+	"target": "@env(DEFAULT)",
+	"minVersion": "0.8.5",
+	"compatibilityLevel": "JAVA_8",
+	"mixins": [],
+	"server": [],
+	"client": [
+		"MixinGuiCreativeInventoryExtended",
+		"MixinGuiInventoryPixelmonExtended"
+	]
+}
