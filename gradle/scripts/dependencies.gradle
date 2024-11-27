@@ -85,8 +85,3 @@ task downloadLocalLibs(type: Download) {
     ])
     dest(layout.projectDirectory.dir('./gradle/local_libs/'))
 }
-
-if (project.hasProperty("run_number")) {
-    println("On GitHub runs #${props.run_number}, enabling download task")
-    tasks.build.dependsOn(downloadLocalLibs)
-}
