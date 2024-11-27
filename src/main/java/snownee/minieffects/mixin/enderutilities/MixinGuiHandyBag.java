@@ -27,6 +27,11 @@ public abstract class MixinGuiHandyBag extends GuiContainerLargeStacks implement
         super(null ,0, 0, null);
     }
 
+    @Inject(method = "initGui()V", at = @At("TAIL"))
+    public void miniEffects$init(CallbackInfo ci) {
+        mini$eff.updateArea(guiLeft, guiTop);
+    }
+
     @Inject(method = "drawActivePotionEffects", at = @At("HEAD"), cancellable = true, remap = false)
     private void miniEff$drawEffects(CallbackInfo ci) {
         val effectsTotalOld = mini$eff.effectsTotal;
