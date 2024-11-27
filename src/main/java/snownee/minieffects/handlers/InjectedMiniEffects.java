@@ -42,6 +42,8 @@ public class InjectedMiniEffects implements IAreasGetter {
         if (effects.isEmpty()) {
             return false;
         }
+        this.effectsTotal = 0;
+        this.effectsBad = 0;
         for (val effect : effects) {
             val potion = effect.getPotion();
             if (potion.shouldRender(effect)) {
