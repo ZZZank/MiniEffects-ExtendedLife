@@ -78,3 +78,15 @@ dependencies {
     //     transitive = false
     // }
 }
+
+task downloadLocalLibs(type: Download) {
+    src([
+        "https://edge.forgecdn.net/files/4348/446/Pixelmon-1.12.2-8.4.3-universal.jar"
+    ])
+    dest(layout.projectDirectory.dir('./gradle/local_libs/'))
+}
+
+if (project.hasProperty("run_number")) {
+    println("On GitHub runs #${props.run_number}, enabling download task")
+    tasks.compileJava.dependsOn(downloadLocalLibs)
+}
