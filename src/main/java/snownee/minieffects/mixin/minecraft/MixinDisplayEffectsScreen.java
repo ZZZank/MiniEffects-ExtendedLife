@@ -42,30 +42,10 @@ public abstract class MixinDisplayEffectsScreen extends GuiContainer implements 
         locals = LocalCapture.CAPTURE_FAILSOFT
     )
     private void miniEffects$render(CallbackInfo ci, int capturedLeft, int capturedTop) {
-        val effectsTotalOld = mini$effects.effectsTotal;
-
-        val updated = mini$effects.updateEffectCounter(mc.player.getActivePotionEffects());
-        if (!updated) {
-            return;
+        val replaced = mini$effects.defaultAction(capturedLeft, capturedTop);
+        if (replaced) {
+            ci.cancel();
         }
-
-        if (mini$effects.effectsTotal != effectsTotalOld) {
-            if (mini$effects.effectsTotal == 0 || mini$effects.expanded) {
-                mini$effects.updateArea(capturedLeft, capturedTop);
-            }
-        }
-
-        val shouldExpand = mini$effects.shouldExpand(mc, Mouse.getX(), Mouse.getY());
-        if (this.mini$effects.expanded != shouldExpand) {
-            this.mini$effects.expanded = shouldExpand;
-            mini$effects.updateArea(capturedLeft, capturedTop);
-        }
-
-        if (mini$effects.effectsTotal <= 0 || shouldExpand) {
-            return; //continue normal (expand) drawing
-        }
-        mini$effects.renderMini();
-        ci.cancel();
     }
 
     @Override

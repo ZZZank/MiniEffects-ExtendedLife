@@ -8,6 +8,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
+import org.lwjgl.input.Mouse;
 import snownee.minieffects.IAreasGetter;
 import snownee.minieffects.MiniEffectsConfig;
 
@@ -19,7 +20,7 @@ import java.util.List;
 /**
  * @author ZZZank
  */
-public class InjectedMiniEffects implements IAreasGetter {
+public final class InjectedMiniEffects implements IAreasGetter {
 
     public final Rectangle iconArea = new Rectangle();
     public final Rectangle expandedArea = new Rectangle();
@@ -33,6 +34,34 @@ public class InjectedMiniEffects implements IAreasGetter {
     public InjectedMiniEffects(GuiContainer screen) {
         this.screen = screen;
         this.icon.setTagCompound(new NBTTagCompound());
+    }
+
+    public boolean defaultAction(int capturedLeft, int capturedTop) {
+        val effectsTotalOld = this.effectsTotal;
+        val mc = this.screen.mc;
+
+        val updated = this.updateEffectCounter(mc.player.getActivePotionEffects());
+        if (!updated) {
+            return false;
+        }
+
+        if (this.effectsTotal != effectsTotalOld) {
+            if (this.effectsTotal == 0 || this.expanded) {
+                this.updateArea(capturedLeft, capturedTop);
+            }
+        }
+
+        val shouldExpand = this.shouldExpand(mc, Mouse.getX(), Mouse.getY());
+        if (this.expanded != shouldExpand) {
+            this.expanded = shouldExpand;
+            this.updateArea(capturedLeft, capturedTop);
+        }
+
+        if (this.effectsTotal <= 0 || shouldExpand) {
+            return false; //continue normal (expand) drawing
+        }
+        this.renderMini();
+        return true;
     }
 
     /**

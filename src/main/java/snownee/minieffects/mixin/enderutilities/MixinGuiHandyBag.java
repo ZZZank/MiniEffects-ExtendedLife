@@ -34,32 +34,10 @@ public abstract class MixinGuiHandyBag extends GuiContainerLargeStacks implement
 
     @Inject(method = "drawActivePotionEffects", at = @At("HEAD"), cancellable = true, remap = false)
     private void miniEff$drawEffects(CallbackInfo ci) {
-        val effectsTotalOld = mini$eff.effectsTotal;
-
-        val updated = mini$eff.updateEffectCounter(mc.player.getActivePotionEffects());
-        if (!updated) {
-            return;
+        val replaced = mini$eff.defaultAction(this.guiLeft - 124, this.guiTop);
+        if (replaced) {
+            ci.cancel();
         }
-
-        val capturedLeft = this.guiLeft - 124;
-        val capturedTop = this.guiTop;
-        if (mini$eff.effectsTotal != effectsTotalOld) {
-            if (mini$eff.effectsTotal == 0 || mini$eff.expanded) {
-                mini$eff.updateArea(capturedLeft, capturedTop);
-            }
-        }
-
-        val shouldExpand = mini$eff.shouldExpand(mc, Mouse.getX(), Mouse.getY());
-        if (this.mini$eff.expanded != shouldExpand) {
-            this.mini$eff.expanded = shouldExpand;
-            mini$eff.updateArea(capturedLeft, capturedTop);
-        }
-
-        if (mini$eff.effectsTotal <= 0 || shouldExpand) {
-            return; //continue normal (expand) drawing
-        }
-        mini$eff.renderMini();
-        ci.cancel();
     }
 
     @Override
