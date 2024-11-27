@@ -1,10 +1,9 @@
 package snownee.minieffects;
 
-import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import snownee.minieffects.handlers.MiniEffectsEventHandlers;
 
 @Mod(
 	modid = MiniEffectsInfo.MOD_ID,
@@ -18,13 +17,7 @@ public class MiniEffects {
 
 	public MiniEffects() {
 		if (FMLCommonHandler.instance().getSide().isClient()) {
-			MinecraftForge.EVENT_BUS.register(this);
-			MinecraftForge.EVENT_BUS.register(MiniEffectsConfig.class);
+			MinecraftForge.EVENT_BUS.register(MiniEffectsEventHandlers.class);
 		}
-	}
-
-	@SubscribeEvent
-	public void onPotionShift(GuiScreenEvent.PotionShiftEvent event) {
-		event.setCanceled(true);
 	}
 }
