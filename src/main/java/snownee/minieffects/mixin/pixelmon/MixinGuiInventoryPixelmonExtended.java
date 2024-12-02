@@ -21,7 +21,7 @@ import java.util.List;
 public abstract class MixinGuiInventoryPixelmonExtended extends GuiInventory implements IAreasGetter {
 
     @Unique
-    private final InjectedMiniEffects mini$eff = new InjectedMiniEffects(this);
+    private final InjectedMiniEffects mini$eff = new InjectedMiniEffects.RightPin(this);
 
     @Inject(method = "initGui()V", at = @At("TAIL"))
     public void miniEffects$init(CallbackInfo ci) {

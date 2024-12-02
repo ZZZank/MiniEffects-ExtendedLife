@@ -20,9 +20,7 @@ import java.util.List;
 /**
  * @author ZZZank
  */
-public final class InjectedMiniEffects implements IAreasGetter {
-
-    public static final int EXPANDED_WIDTH = 124;
+public class InjectedMiniEffects implements IAreasGetter {
 
     public final Rectangle iconArea = new Rectangle();
     public final Rectangle expandedArea = new Rectangle();
@@ -108,22 +106,23 @@ public final class InjectedMiniEffects implements IAreasGetter {
 
     public void updateArea(int capturedLeft, int capturedTop) {
         if (expanded) {
-            expandedArea.setBounds(
-                capturedLeft,
-                capturedTop,
-                119,
-                33 * Math.min(5, effectsTotal)
-            );
+            updateExpanded(capturedLeft, capturedTop);
         } else {
-            iconArea.setBounds(
-                //not capturedLeft because if `capturedLeft` is tweaked, it's supposed to be
-                //targeting "expanded" situation
-                capturedLeft + EXPANDED_WIDTH - 25 + MiniEffectsConfig.xOffset,
-                capturedTop + MiniEffectsConfig.yOffset,
-                25,
-                25
+            //not capturedLeft because if `capturedLeft` is tweaked, it's supposed to be
+            //targeting "expanded" situation
+            updateFolded(
+                this.screen.getGuiLeft() - 25 + MiniEffectsConfig.xOffset,
+                this.screen.getGuiTop() + MiniEffectsConfig.yOffset
             );
         }
+    }
+
+    protected void updateFolded(int x, int y) {
+        iconArea.setBounds(x, y, 25, 25);
+    }
+
+    protected void updateExpanded(int x, int y) {
+        expandedArea.setBounds(x, y, 119, 33 * Math.min(5, effectsTotal));
     }
 
     public boolean shouldExpand(Minecraft mc, int mouseX, int mouseY) {
@@ -140,5 +139,24 @@ public final class InjectedMiniEffects implements IAreasGetter {
         return effectsTotal == 0
             ? Collections.emptyList()
             : Collections.singletonList(expanded ? expandedArea : iconArea);
+    }
+
+    /**
+     * folded position tweaked for effects rendering on the right side of GUI
+     */
+    public static class RightPin extends InjectedMiniEffects {
+
+        public RightPin(GuiContainer screen) {
+            super(screen);
+        }
+
+        @Override
+        public void updateArea(int capturedLeft, int capturedTop) {
+            if (expanded) {
+                updateExpanded(capturedLeft, capturedTop);
+            } else {
+                updateFolded(capturedLeft + MiniEffectsConfig.xOffset, capturedTop + MiniEffectsConfig.yOffset);
+            }
+        }
     }
 }
