@@ -4,7 +4,6 @@ import java.awt.Rectangle;
 import java.util.List;
 
 import lombok.val;
-import org.lwjgl.input.Mouse;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.InventoryEffectRenderer;

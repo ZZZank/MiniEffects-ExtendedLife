@@ -28,7 +28,7 @@ public abstract class MixinGuiCreativeInventoryExtended extends GuiContainerCrea
         mini$eff.updateArea(guiLeft, guiTop);
     }
 
-    @Inject(method = "drawActivePotionEffects", at = @At("HEAD"), cancellable = true, remap = false)
+    @Inject(method = "drawActivePotionEffects", at = @At("HEAD"), cancellable = true)
     private void miniEff$drawEffects(CallbackInfo ci) {
         val replaced = mini$eff.defaultAction(this.guiLeft + 196, this.guiTop + 1);
         if (replaced) {
