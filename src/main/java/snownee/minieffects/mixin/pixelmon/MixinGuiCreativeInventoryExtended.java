@@ -25,7 +25,7 @@ public abstract class MixinGuiCreativeInventoryExtended extends GuiContainerCrea
 
     @Inject(method = "initGui()V", at = @At("TAIL"))
     public void miniEffects$init(CallbackInfo ci) {
-        mini$eff.updateArea(guiLeft, guiTop);
+        mini$eff.updateArea(guiLeft + 196, guiTop + 1);
     }
 
     @Inject(method = "drawActivePotionEffects", at = @At("HEAD"), cancellable = true)

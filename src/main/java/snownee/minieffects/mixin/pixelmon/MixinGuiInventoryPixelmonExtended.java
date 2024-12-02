@@ -25,12 +25,12 @@ public abstract class MixinGuiInventoryPixelmonExtended extends GuiInventory imp
 
     @Inject(method = "initGui()V", at = @At("TAIL"))
     public void miniEffects$init(CallbackInfo ci) {
-        mini$eff.updateArea(guiLeft, guiTop);
+        mini$eff.updateArea(guiLeft + 177, guiTop + 1);
     }
 
     @Inject(method = "drawActivePotionEffects", at = @At("HEAD"), cancellable = true)
     private void miniEff$drawEffects(CallbackInfo ci) {
-        val replaced = mini$eff.defaultAction(this.guiLeft + 196, this.guiTop + 1);
+        val replaced = mini$eff.defaultAction(this.guiLeft + 177, this.guiTop + 1);
         if (replaced) {
             ci.cancel();
         }
