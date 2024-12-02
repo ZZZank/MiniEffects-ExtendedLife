@@ -22,6 +22,8 @@ import java.util.List;
  */
 public final class InjectedMiniEffects implements IAreasGetter {
 
+    public static final int EXPANDED_WIDTH = 124;
+
     public final Rectangle iconArea = new Rectangle();
     public final Rectangle expandedArea = new Rectangle();
     public final GuiContainer screen;
@@ -116,8 +118,8 @@ public final class InjectedMiniEffects implements IAreasGetter {
             iconArea.setBounds(
                 //not capturedLeft because if `capturedLeft` is tweaked, it's supposed to be
                 //targeting "expanded" situation
-                screen.getGuiLeft() - 25 + MiniEffectsConfig.xOffset,
-                screen.getGuiTop() + MiniEffectsConfig.yOffset,
+                capturedLeft + EXPANDED_WIDTH - 25 + MiniEffectsConfig.xOffset,
+                capturedTop + MiniEffectsConfig.yOffset,
                 25,
                 25
             );
