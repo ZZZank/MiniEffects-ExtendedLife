@@ -44,7 +44,7 @@ dependencies {
 
     compileOnly(rfg.deobf("curse.maven:ender-utilities-224320:2977010"))
 
-    // too slow to download via CF maven
+    // too slow to download via CF maven, run "downloadLocalLibs" task instead
     compileOnly(rfg.deobf(files("./gradle/local_libs/Pixelmon-1.12.2-8.4.3-universal.jar")))
 
     // Example - Dependency descriptor:
