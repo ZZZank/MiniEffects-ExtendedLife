@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * @author ZZZank
  */
-public class InjectedMiniEffects implements IAreasGetter {
+public class InjectedMiniEffects {
 
     public final Rectangle iconArea = new Rectangle();
     public final Rectangle expandedArea = new Rectangle();
@@ -94,10 +94,13 @@ public class InjectedMiniEffects implements IAreasGetter {
     }
 
     public void renderMini() {
+        if (expanded) {
+            return;
+        }
         MiniEffectsRenderer.renderMini(
             screen,
-            expanded ? expandedArea.x : iconArea.x,
-            expanded ? expandedArea.y : iconArea.y,
+            iconArea.x,
+            iconArea.y,
             icon,
             this.effectsTotal,
             this.effectsBad
@@ -134,7 +137,6 @@ public class InjectedMiniEffects implements IAreasGetter {
         return shouldExpand(x, y);
     }
 
-    @Override
     public List<Rectangle> miniEff$getAreas() {
         return effectsTotal == 0
             ? Collections.emptyList()
@@ -145,7 +147,6 @@ public class InjectedMiniEffects implements IAreasGetter {
      * folded position tweaked for effects rendering on the right side of GUI
      */
     public static class RightPin extends InjectedMiniEffects {
-
         public RightPin(GuiContainer screen) {
             super(screen);
         }
