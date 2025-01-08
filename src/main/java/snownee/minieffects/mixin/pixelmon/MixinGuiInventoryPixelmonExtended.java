@@ -15,6 +15,7 @@ import java.awt.*;
 import java.util.List;
 
 /**
+ * @see GuiInventoryPixelmonExtended#drawActivePotionEffects()
  * @author ZZZank
  */
 @Mixin(GuiInventoryPixelmonExtended.class)

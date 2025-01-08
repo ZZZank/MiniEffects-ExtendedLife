@@ -36,7 +36,7 @@ public class MiniEffectsJEIPlugin implements IModPlugin {
         public List<Rectangle> getGuiExtraAreas(@Nonnull GuiContainer gui) {
             return gui instanceof IAreasGetter
                 ? ((IAreasGetter) gui).miniEff$getAreas()
-                : Collections.emptyList();
+                : null;
         }
     }
 }

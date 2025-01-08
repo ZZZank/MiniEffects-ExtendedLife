@@ -15,6 +15,7 @@ import java.awt.*;
 import java.util.List;
 
 /**
+ * @see GuiCreativeInventoryExtended#drawActivePotionEffects()
  * @author ZZZank
  */
 @Mixin(GuiCreativeInventoryExtended.class)
