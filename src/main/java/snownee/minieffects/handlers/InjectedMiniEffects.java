@@ -9,7 +9,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import org.lwjgl.input.Mouse;
-import snownee.minieffects.MiniEffectsConfig;
 
 import java.awt.*;
 import java.util.Collection;
@@ -30,9 +29,20 @@ public class InjectedMiniEffects {
     public int effectsTotal;
     public int effectsBad;
 
+    private MiniEffectsOffsets.Vec2i cachedOffset = null;
+    private int offsetTimeStamp = -1;
+
     public InjectedMiniEffects(GuiContainer screen) {
         this.screen = screen;
         this.icon.setTagCompound(new NBTTagCompound());
+    }
+
+    public MiniEffectsOffsets.Vec2i getOffset() {
+        if (offsetTimeStamp != MiniEffectsOffsets.timeStamp()) {
+            offsetTimeStamp = MiniEffectsOffsets.timeStamp();
+            cachedOffset = MiniEffectsOffsets.getOrDefault(screen.getClass());
+        }
+        return cachedOffset;
     }
 
     public boolean defaultAction(int capturedLeft, int capturedTop) {
@@ -110,11 +120,12 @@ public class InjectedMiniEffects {
         if (expanded) {
             updateExpanded(capturedLeft, capturedTop);
         } else {
+            val offset = getOffset();
             //not capturedLeft because if `capturedLeft` is tweaked, it's supposed to be
             //targeting "expanded" situation
             updateFolded(
-                this.screen.getGuiLeft() - 25 + MiniEffectsConfig.xOffset,
-                this.screen.getGuiTop() + MiniEffectsConfig.yOffset
+                this.screen.getGuiLeft() - 25 + offset.x,
+                this.screen.getGuiTop() + offset.y
             );
         }
     }
@@ -155,7 +166,8 @@ public class InjectedMiniEffects {
             if (expanded) {
                 updateExpanded(capturedLeft, capturedTop);
             } else {
-                updateFolded(capturedLeft + MiniEffectsConfig.xOffset, capturedTop + MiniEffectsConfig.yOffset);
+                val offset = getOffset();
+                updateFolded(capturedLeft + offset.x, capturedTop + offset.y);
             }
         }
     }

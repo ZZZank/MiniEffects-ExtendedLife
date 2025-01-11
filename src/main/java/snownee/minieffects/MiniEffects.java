@@ -1,6 +1,8 @@
 package snownee.minieffects;
 
 import net.minecraftforge.fml.common.Mod;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 @Mod(
 	modid = MiniEffectsInfo.MOD_ID,
@@ -11,6 +13,7 @@ import net.minecraftforge.fml.common.Mod;
 )
 public class MiniEffects {
 	public static final String ID = MiniEffectsInfo.MOD_ID;
+	public static final Logger LOGGER = LogManager.getLogger(ID);
 
 	public MiniEffects() {
 	}
