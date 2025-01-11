@@ -9,7 +9,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import org.lwjgl.input.Mouse;
-import snownee.minieffects.IAreasGetter;
 import snownee.minieffects.MiniEffectsConfig;
 
 import java.awt.*;
@@ -86,9 +85,9 @@ public class InjectedMiniEffects {
     }
 
     public boolean shouldExpand(int x, int y) {
-        boolean shouldExpand = iconArea.contains(x, y);
+        val shouldExpand = iconArea.contains(x, y);
         if (this.expanded) { //prevent shrinking if in expanded area and currently expanded
-            shouldExpand = shouldExpand || expandedArea.contains(x, y);
+            return shouldExpand || expandedArea.contains(x, y);
         }
         return shouldExpand;
     }

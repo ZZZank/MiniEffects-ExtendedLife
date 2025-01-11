@@ -9,7 +9,6 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.awt.*;
-import java.util.Collections;
 import java.util.List;
 
 /**
