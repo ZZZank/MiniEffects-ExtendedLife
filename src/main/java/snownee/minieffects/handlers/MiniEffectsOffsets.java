@@ -14,13 +14,17 @@ import java.util.Map;
  * @author ZZZank
  */
 @UtilityClass
-public final class MiniEffectsOffsets {
+public class MiniEffectsOffsets {
 
-    private static Map<Class<?>, Vec2i> OFFSETS;
-    private static Vec2i DEFAULT;
-    private static int timeStamp = 0;
+    private Map<Class<?>, Vec2i> OFFSETS;
+    private Vec2i DEFAULT;
+    private int timeStamp = 0;
 
-    public static void refreshFromConfig() {
+    static {
+        refreshFromConfig();
+    }
+
+    public void refreshFromConfig() {
         val tmp = new HashMap<Class<?>, Vec2i>();
         for (val entry : MiniEffectsConfig.offsetPerScreen) {
             val split = entry.split(";");
@@ -45,23 +49,23 @@ public final class MiniEffectsOffsets {
         timeStamp++;
     }
 
-    public static Vec2i get(Class<?> type) {
+    public Vec2i get(Class<?> type) {
         if (type == null) {
             return null;
         }
         return OFFSETS.get(type);
     }
 
-    public static Vec2i getOrDefault(Class<?> type) {
+    public Vec2i getOrDefault(Class<?> type) {
         val got = get(type);
         return got == null ? DEFAULT : got;
     }
 
-    public static Vec2i getDefault() {
+    public Vec2i getDefault() {
         return MiniEffectsOffsets.DEFAULT;
     }
 
-    public static int timeStamp() {
+    public int timeStamp() {
         return MiniEffectsOffsets.timeStamp;
     }
 
