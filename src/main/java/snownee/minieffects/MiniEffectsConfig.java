@@ -1,11 +1,12 @@
 package snownee.minieffects;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.experimental.UtilityClass;
+import net.minecraftforge.common.config.Config;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class MiniEffectsConfig {
+@UtilityClass
+@Config(modid = MiniEffects.ID)
+public class MiniEffectsConfig {
 
-	public static int xOffset;
-	public static int yOffset;
+	public int xOffset;
+	public int yOffset;
 }
