@@ -21,7 +21,7 @@ public class MiniEffectsEventHandlers {
     public static void onConfigReload(@Nonnull ConfigChangedEvent.OnConfigChangedEvent event) {
         if (event.getModID().equals(MiniEffects.ID)) {
             ConfigManager.sync(MiniEffects.ID, Config.Type.INSTANCE);
-            MiniEffectsOffsets.refreshFromConfig();
+            MiniEffectsOffsets.markConfigChanged();
         }
     }
 

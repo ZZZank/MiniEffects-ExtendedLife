@@ -19,9 +19,10 @@ public class MiniEffectsOffsets {
     private Map<Class<?>, Vec2i> OFFSETS;
     private Vec2i DEFAULT;
     private int timeStamp = 0;
+    private boolean refreshed = false;
 
-    static {
-        refreshFromConfig();
+    public void markConfigChanged() {
+        refreshed = false;
     }
 
     public void refreshFromConfig() {
@@ -36,7 +37,7 @@ public class MiniEffectsOffsets {
                 continue;
             }
             try {
-                val c = Class.forName(split[0]);
+                val c = Class.forName(split[0], false, MiniEffectsOffsets.class.getClassLoader());
                 val x = Integer.parseInt(split[1]);
                 val y = Integer.parseInt(split[2]);
                 tmp.put(c, new Vec2i(x, y));
@@ -50,6 +51,10 @@ public class MiniEffectsOffsets {
     }
 
     public Vec2i get(Class<?> type) {
+        if (!refreshed) {
+            refreshFromConfig();
+            refreshed = true;
+        }
         if (type == null) {
             return null;
         }
