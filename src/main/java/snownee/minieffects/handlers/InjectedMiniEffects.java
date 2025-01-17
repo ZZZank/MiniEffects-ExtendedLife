@@ -20,6 +20,8 @@ import java.util.List;
  */
 public class InjectedMiniEffects {
 
+    public static final int ICON_SIZE = 25;
+
     public final Rectangle iconArea = new Rectangle();
     public final Rectangle expandedArea = new Rectangle();
     public final GuiContainer screen;
@@ -123,15 +125,12 @@ public class InjectedMiniEffects {
             val offset = getOffset();
             //not capturedLeft because if `capturedLeft` is tweaked, it's supposed to be
             //targeting "expanded" situation
-            updateFolded(
-                this.screen.getGuiLeft() - iconArea.x + offset.x,
-                this.screen.getGuiTop() + offset.y
-            );
+            updateFolded(screen.getGuiLeft() - ICON_SIZE + offset.x, screen.getGuiTop() + offset.y);
         }
     }
 
     protected void updateFolded(int x, int y) {
-        iconArea.setBounds(x, y, 25, 25);
+        iconArea.setBounds(x, y, ICON_SIZE, ICON_SIZE);
     }
 
     protected void updateExpanded(int x, int y) {
