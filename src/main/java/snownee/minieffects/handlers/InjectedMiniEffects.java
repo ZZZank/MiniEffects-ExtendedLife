@@ -124,7 +124,7 @@ public class InjectedMiniEffects {
             //not capturedLeft because if `capturedLeft` is tweaked, it's supposed to be
             //targeting "expanded" situation
             updateFolded(
-                this.screen.getGuiLeft() - 25 + offset.x,
+                this.screen.getGuiLeft() - iconArea.x + offset.x,
                 this.screen.getGuiTop() + offset.y
             );
         }

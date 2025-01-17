@@ -25,7 +25,7 @@ public class MiniEffectsOffsets {
         refreshed = false;
     }
 
-    public void refreshFromConfig() {
+    private void refreshFromConfig() {
         val tmp = new HashMap<Class<?>, Vec2i>();
         for (val entry : MiniEffectsConfig.offsetPerScreen) {
             val split = entry.split(";");
@@ -69,11 +69,11 @@ public class MiniEffectsOffsets {
     }
 
     public Vec2i getDefault() {
-        return MiniEffectsOffsets.DEFAULT;
+        return DEFAULT;
     }
 
     public int timeStamp() {
-        return MiniEffectsOffsets.timeStamp;
+        return timeStamp;
     }
 
     @AllArgsConstructor
