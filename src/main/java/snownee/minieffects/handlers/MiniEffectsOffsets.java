@@ -42,7 +42,9 @@ public class MiniEffectsOffsets {
                 val y = Integer.parseInt(split[2]);
                 tmp.put(c, new Vec2i(x, y));
             } catch (ClassNotFoundException e) {
-                MiniEffects.LOGGER.error("error happened when processing config entry '{}', skipping", entry);
+                MiniEffects.LOGGER.error("class '{}' not found, skipping config entry '{}'", split[0], entry);
+            } catch (Exception e) {
+                MiniEffects.LOGGER.error("error happened when processing config entry '{}', skipping", entry, e);
             }
         }
         OFFSETS = ImmutableMap.copyOf(tmp);
