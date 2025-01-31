@@ -17,7 +17,7 @@ import java.util.Map;
 @UtilityClass
 public class MiniEffectsOffsets {
 
-    public static final Map<Class<?>, Vec2i> ADDITIONAL = new IdentityHashMap<>();
+    public final Map<Class<?>, Vec2i> ADDITIONAL = new IdentityHashMap<>();
 
     private Map<Class<?>, Vec2i> OFFSETS;
     private Vec2i DEFAULT;

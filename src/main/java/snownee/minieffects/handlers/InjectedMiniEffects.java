@@ -105,6 +105,15 @@ public class InjectedMiniEffects {
         return shouldExpand;
     }
 
+    public boolean shouldExpand(Minecraft mc, int mouseX, int mouseY) {
+        val scaledResolution = new ScaledResolution(mc);
+        val scaledWidth = scaledResolution.getScaledWidth();
+        val scaledHeight = scaledResolution.getScaledHeight();
+        val x = mouseX * scaledWidth / mc.displayWidth;
+        val y = scaledHeight - mouseY * scaledHeight / mc.displayHeight - 1;
+        return shouldExpand(x, y);
+    }
+
     public void renderMini() {
         if (expanded) {
             return;
@@ -136,15 +145,6 @@ public class InjectedMiniEffects {
 
     protected void updateExpanded(int x, int y) {
         expandedArea.setBounds(x, y, 119, 33 * Math.min(5, effectsTotal));
-    }
-
-    public boolean shouldExpand(Minecraft mc, int mouseX, int mouseY) {
-        val scaledResolution = new ScaledResolution(mc);
-        val scaledWidth = scaledResolution.getScaledWidth();
-        val scaledHeight = scaledResolution.getScaledHeight();
-        val x = mouseX * scaledWidth / mc.displayWidth;
-        val y = scaledHeight - mouseY * scaledHeight / mc.displayHeight - 1;
-        return shouldExpand(x, y);
     }
 
     public List<Rectangle> miniEff$getAreas() {
