@@ -55,9 +55,15 @@ public class MiniEffectsOffsets {
                 MiniEffects.LOGGER.error("error happened when processing config entry '{}', skipping", entry, e);
             }
         }
+
         OFFSETS = ImmutableMap.copyOf(tmp);
+
         DEFAULT = new Vec2i(MiniEffectsConfig.xOffset, MiniEffectsConfig.yOffset);
+
         timeStamp++;
+        if (timeStamp == Integer.MAX_VALUE) {
+            timeStamp = 0; // I mean, yeah
+        }
     }
 
     public Vec2i get(Class<?> type) {
