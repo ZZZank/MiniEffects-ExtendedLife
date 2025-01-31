@@ -1,8 +1,5 @@
 package snownee.minieffects.mixin.minecraft;
 
-import java.awt.Rectangle;
-import java.util.List;
-
 import lombok.val;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -13,11 +10,11 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
-import snownee.minieffects.api.IAreasGetter;
+import snownee.minieffects.api.InjectedMiniEffectsHolder;
 import snownee.minieffects.handlers.InjectedMiniEffects;
 
 @Mixin(InventoryEffectRenderer.class)
-public abstract class MixinDisplayEffectsScreen extends GuiContainer implements IAreasGetter {
+public abstract class MixinDisplayEffectsScreen extends GuiContainer implements InjectedMiniEffectsHolder {
 
     @Unique
     private final InjectedMiniEffects mini$effects = new InjectedMiniEffects(this);
@@ -48,7 +45,7 @@ public abstract class MixinDisplayEffectsScreen extends GuiContainer implements 
     }
 
     @Override
-    public List<Rectangle> miniEff$getAreas() {
-        return mini$effects.miniEff$getAreas();
+    public InjectedMiniEffects miniEff$getInjected() {
+        return mini$effects;
     }
 }

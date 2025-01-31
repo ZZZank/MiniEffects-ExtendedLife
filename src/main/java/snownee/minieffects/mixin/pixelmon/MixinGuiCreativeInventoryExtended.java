@@ -8,18 +8,16 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import snownee.minieffects.api.IAreasGetter;
+import snownee.minieffects.api.InjectedMiniEffectsHolder;
 import snownee.minieffects.handlers.InjectedMiniEffects;
 
-import java.awt.*;
-import java.util.List;
-
 /**
- * @see GuiCreativeInventoryExtended#drawActivePotionEffects()
  * @author ZZZank
+ * @see GuiCreativeInventoryExtended#drawActivePotionEffects()
  */
 @Mixin(GuiCreativeInventoryExtended.class)
-public abstract class MixinGuiCreativeInventoryExtended extends GuiContainerCreative implements IAreasGetter {
+public abstract class MixinGuiCreativeInventoryExtended extends GuiContainerCreative
+    implements InjectedMiniEffectsHolder {
 
     @Unique
     private final InjectedMiniEffects mini$eff = new InjectedMiniEffects(this);
@@ -38,8 +36,8 @@ public abstract class MixinGuiCreativeInventoryExtended extends GuiContainerCrea
     }
 
     @Override
-    public List<Rectangle> miniEff$getAreas() {
-        return mini$eff.miniEff$getAreas();
+    public InjectedMiniEffects miniEff$getInjected() {
+        return mini$eff;
     }
 
     private MixinGuiCreativeInventoryExtended() {
