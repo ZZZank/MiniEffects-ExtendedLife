@@ -7,7 +7,7 @@ import snownee.minieffects.MiniEffects;
 import snownee.minieffects.MiniEffectsConfig;
 import snownee.minieffects.api.Vec2i;
 
-import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.Map;
 
 /**
@@ -15,6 +15,8 @@ import java.util.Map;
  */
 @UtilityClass
 public class MiniEffectsOffsets {
+
+    public static final Map<Class<?>, Vec2i> ADDITIONAL = new IdentityHashMap<>();
 
     private Map<Class<?>, Vec2i> OFFSETS;
     private Vec2i DEFAULT;
@@ -26,7 +28,7 @@ public class MiniEffectsOffsets {
     }
 
     private void refreshFromConfig() {
-        val tmp = new HashMap<Class<?>, Vec2i>();
+        val tmp = new IdentityHashMap<>(ADDITIONAL);
         for (val entry : MiniEffectsConfig.offsetPerScreen) {
             val split = entry.split(";");
             if (split.length != 3) {
