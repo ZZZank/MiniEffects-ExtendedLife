@@ -1,6 +1,7 @@
 package snownee.minieffects.handlers;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
 import lombok.experimental.UtilityClass;
 import lombok.val;
 import snownee.minieffects.MiniEffects;
@@ -28,7 +29,12 @@ public class MiniEffectsOffsets {
     }
 
     private void refreshFromConfig() {
-        val tmp = new IdentityHashMap<>(ADDITIONAL);
+        val tmp = new IdentityHashMap<>(
+            Maps.filterEntries(
+                ADDITIONAL,
+                (e) -> e.getKey() != null && e.getValue() != null
+            )
+        );
         for (val entry : MiniEffectsConfig.offsetPerScreen) {
             val split = entry.split(";");
             if (split.length != 3) {
