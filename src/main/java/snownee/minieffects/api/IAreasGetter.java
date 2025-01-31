@@ -1,4 +1,4 @@
-package snownee.minieffects;
+package snownee.minieffects.api;
 
 import java.awt.Rectangle;
 import java.util.List;

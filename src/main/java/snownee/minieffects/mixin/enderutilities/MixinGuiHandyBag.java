@@ -3,13 +3,12 @@ package snownee.minieffects.mixin.enderutilities;
 import fi.dy.masa.enderutilities.gui.client.GuiHandyBag;
 import fi.dy.masa.enderutilities.gui.client.base.GuiContainerLargeStacks;
 import lombok.val;
-import org.lwjgl.input.Mouse;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import snownee.minieffects.IAreasGetter;
+import snownee.minieffects.api.IAreasGetter;
 import snownee.minieffects.handlers.InjectedMiniEffects;
 
 import java.awt.*;

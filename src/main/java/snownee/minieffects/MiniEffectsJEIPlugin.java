@@ -5,6 +5,7 @@ import mezz.jei.api.IModRegistry;
 import mezz.jei.api.JEIPlugin;
 import mezz.jei.api.gui.IAdvancedGuiHandler;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import snownee.minieffects.api.IAreasGetter;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

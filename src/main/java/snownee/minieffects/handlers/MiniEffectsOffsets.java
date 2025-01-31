@@ -1,11 +1,11 @@
 package snownee.minieffects.handlers;
 
 import com.google.common.collect.ImmutableMap;
-import lombok.AllArgsConstructor;
 import lombok.experimental.UtilityClass;
 import lombok.val;
 import snownee.minieffects.MiniEffects;
 import snownee.minieffects.MiniEffectsConfig;
+import snownee.minieffects.api.Vec2i;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -74,11 +74,5 @@ public class MiniEffectsOffsets {
 
     public int timeStamp() {
         return timeStamp;
-    }
-
-    @AllArgsConstructor
-    public static class Vec2i {
-        public final int x;
-        public final int y;
     }
 }

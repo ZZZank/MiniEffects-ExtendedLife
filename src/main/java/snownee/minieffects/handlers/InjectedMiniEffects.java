@@ -9,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import org.lwjgl.input.Mouse;
+import snownee.minieffects.api.Vec2i;
 
 import java.awt.*;
 import java.util.Collection;
@@ -31,7 +32,7 @@ public class InjectedMiniEffects {
     public int effectsTotal;
     public int effectsBad;
 
-    private MiniEffectsOffsets.Vec2i cachedOffset = null;
+    private Vec2i cachedOffset = null;
     private int offsetTimeStamp = -1;
 
     public InjectedMiniEffects(GuiContainer screen) {
@@ -39,7 +40,7 @@ public class InjectedMiniEffects {
         this.icon.setTagCompound(new NBTTagCompound());
     }
 
-    public MiniEffectsOffsets.Vec2i getOffset() {
+    public Vec2i getOffset() {
         if (offsetTimeStamp != MiniEffectsOffsets.timeStamp()) {
             offsetTimeStamp = MiniEffectsOffsets.timeStamp();
             cachedOffset = MiniEffectsOffsets.getOrDefault(screen.getClass());
